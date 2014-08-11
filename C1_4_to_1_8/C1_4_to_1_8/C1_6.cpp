@@ -18,6 +18,8 @@ int _tmain( int argc, _TCHAR* argv[] )
 
 	std::cout << totalPrice << std::endl;
 
+	delete[] maxPriceTable;
+
 	getchar();
 	return 0;
 }
