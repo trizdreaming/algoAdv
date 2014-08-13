@@ -55,6 +55,18 @@ int LcsBottomUp( std::string& str1, std::string& str2 )
 				resultTable[str1SubLen][str2SubLen] = _MAX(resultTable[str1SubLen-1][str2SubLen], resultTable[str1SubLen][str2SubLen-1]);
 			}
 		}
+		
+		//각 라인 테스트 코드
+		for ( int i = 0; i <= str1.length(); ++i )
+		{
+			for ( int j = 0; j <= str2.length(); ++j )
+			{
+				printf_s( "%2d", resultTable[i][j] );
+			}
+			printf_s( "\n" );
+		}
+		getchar();
+
 	}
 
 	int lcsLen = resultTable[str1.length()][str2.length()];
