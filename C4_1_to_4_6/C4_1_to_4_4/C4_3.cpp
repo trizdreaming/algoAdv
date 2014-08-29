@@ -5,7 +5,6 @@
 #include <iostream>
 #include <vector>
 
-#define _MAX(x, y) ((x > y)? x : y)
 
 typedef struct ACT
 {

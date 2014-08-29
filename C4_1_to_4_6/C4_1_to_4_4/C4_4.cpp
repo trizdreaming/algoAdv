@@ -13,17 +13,17 @@ typedef struct ITEM
 	int value;
 } item_t;
 
-void InsertActivityTable( int start, int end, std::vector<item_t*>& stolenItem );
+void MakeItemList( int start, int end, std::vector<item_t*>& stolenItem );
 int KnapsackRecursion( std::vector<item_t*>& stolenItem, int itemNum, int packSize );
 
 int _tmain( int argc, _TCHAR* argv[] )
 {
 	std::vector<item_t*>* stolenItem = new std::vector < item_t* > ;
 
-	//actTable 제작 함수
-	InsertActivityTable( 10, 60, *stolenItem );
-	InsertActivityTable( 20, 100, *stolenItem );
-	InsertActivityTable( 30, 120, *stolenItem );
+	//ItemList 제작 함수
+	MakeItemList( 10, 60, *stolenItem );
+	MakeItemList( 20, 100, *stolenItem );
+	MakeItemList( 30, 120, *stolenItem );
 
 
 	//////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ int _tmain( int argc, _TCHAR* argv[] )
 	printf_s( "%d\n", maxValue );
 
 	//////////////////////////////////////////////////////////////////////////
-	//actTable 제거 함수
+	//ItemList 제거 함수
 	for ( auto& iter : *stolenItem )
 	{
 		auto toBeDelete = iter;
@@ -70,8 +70,9 @@ int KnapsackRecursion( std::vector<item_t*>& stolenItem, int itemNum, int packSi
 }
 
 
-//종료 값 비교를 통해 오름차순 list로 만들어 주는 함수
-void InsertActivityTable( int weight, int value, std::vector<item_t*>& stolenItem )
+//그냥 입력인자를 받아 item 리스트로 만들어 줌
+//마지막 인자를 기준으로 오름차순 정렬은?! C4_5 정렬 적용
+void MakeItemList( int weight, int value, std::vector<item_t*>& stolenItem )
 {
 	item_t* tempItem = new item_t;
 	tempItem->weight = weight;
