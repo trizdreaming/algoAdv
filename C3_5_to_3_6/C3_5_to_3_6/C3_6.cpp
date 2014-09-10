@@ -5,7 +5,6 @@
 #include <iostream>
 
 int LongestIncreasingSeq( int* seq, int seqSize );
-void PrintLIS( const int* resTable, const int* seq );
 
 int _tmain( int argc, _TCHAR* argv[] )
 {
@@ -50,7 +49,6 @@ int LongestIncreasingSeq( int* seq, int seqSize )
 	return maxlen;
 }
 
-void PrintLIS( const int* resTable, const int* seq )
-{
-
-}
+//references
+//http://piml.tistory.com/2
+//http://moogi.new21.org/tc/421
