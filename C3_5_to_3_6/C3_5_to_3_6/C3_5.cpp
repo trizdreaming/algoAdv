@@ -8,6 +8,7 @@
 
 float OptimalBSTRecur( float* pi, float* qi, int sId, int eId, int depth );
 float OptimalBSTMemo( float* pi, float* qi, int sId, int eId, int depth, float** resultTable );
+float OptimalBSTBottomUp( float* pi, float* qi, int eId, float** resultTable, float** depthTable, int** rootTable );
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -37,8 +38,75 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 
-	float result2;
+	float result2 = OptimalBSTMemo(pi, qi, 1, 5, 1, resultTable);
 
+	printf_s( "Memo: %f\n", result2 );
+
+
+	//resultTable 다시 초기화(재사용)
+	for ( int i = 0; i <= tableSize; ++i )
+	{
+		for ( int j = 0; j <= tableSize; ++j )
+		{
+			resultTable[i][j] = -1.0f;
+		}
+	}
+
+
+	float** depthTable = new float*[tableSize + 1];
+	for ( int i = 0; i <= tableSize; ++i )
+	{
+		depthTable[i] = new float[tableSize + 1];
+	}
+
+	for ( int i = 0; i <= tableSize; ++i )
+	{
+		for ( int j = 0; j <= tableSize; ++j )
+		{
+			depthTable[i][j] = 0.0f;
+		}
+	}
+
+	int** rootTable = new int*[tableSize];
+	for ( int i = 0; i < tableSize; ++i )
+	{
+		rootTable[i] = new int[tableSize];
+	}
+
+	for ( int i = 0; i < tableSize; ++i )
+	{
+		for ( int j = 0; j < tableSize; ++j )
+		{
+			rootTable[i][j] = 0;
+		}
+	}
+
+
+	float result3 = OptimalBSTBottomUp( pi, qi, 5, resultTable, depthTable, rootTable );
+
+	printf_s( "BottomUp: %f\n", result3 );
+	
+
+	//////////////////////////////////////////////////////////////////////////
+	//자원 해제 부
+	//////////////////////////////////////////////////////////////////////////
+	for ( int i = 0; i < tableSize; ++i )
+	{
+		delete[] rootTable[i];
+	}
+	delete[] rootTable;
+
+	for ( int i = 0; i <= tableSize; ++i )
+	{
+		delete[] depthTable[i];
+	}
+	delete[] depthTable;
+
+	for ( int i = 0; i <= tableSize; ++i )
+	{
+		delete[] resultTable[i];
+	}
+	delete[] resultTable;
 
 	getchar();
 	return 0;
@@ -96,4 +164,37 @@ float OptimalBSTMemo(float* pi, float* qi, int sId, int eId, int depth, float** 
 	resultTable[sId][eId] = minVal;
 
 	return minVal;
+}
+
+float OptimalBSTBottomUp(float* pi, float* qi, int eId, float** resultTable, float** depthTable, int** rootTable )
+{
+	for ( int i = 1; i <= eId + 1; ++i )
+	{
+		resultTable[i][i - 1] = qi[i - 1];
+		depthTable[i][i - 1] = qi[i - 1];
+	}
+
+	for ( int subLen = 1; subLen <= eId; ++ subLen )
+	{
+		for ( int subStartId = 1; subStartId <= eId - subLen + 1; ++subStartId )
+		{
+			int subEndId = subStartId + subLen - 1;
+			resultTable[subStartId][subEndId] = FLT_MAX;
+			depthTable[subStartId][subEndId] = depthTable[subStartId][subEndId - 1] + pi[subEndId] + qi[subEndId];
+
+			for ( int root = subStartId; root <= subEndId; ++ root )
+			{
+				float temp = resultTable[subStartId][root - 1] + resultTable[root + 1][subEndId] + depthTable[subStartId][subEndId];
+
+				if (resultTable[subStartId][subEndId]>temp)
+				{
+					resultTable[subStartId][subEndId] = temp;
+					rootTable[subStartId][subEndId] = root;
+				}
+			}
+		}
+	}
+
+
+	return resultTable[1][eId];
 }
